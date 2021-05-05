@@ -1,5 +1,13 @@
 package com.stackroute.config;
 
+import org.springframework.amqp.core.*;
+//import org.springframework.amqp.rabbit.annotation.Exchange;
+//import org.springframework.amqp.rabbit.annotation.Queue;
+import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,7 +45,8 @@ public class RabbitMQConfig {
      */
     @Bean
     Queue queue() {
-        return new Queue(MY_QUEUE, true);
+
+        return new Queue(queue, true);
     }
 
 
@@ -46,7 +55,7 @@ public class RabbitMQConfig {
         /**
          * Add code to create Direct Exchange
          */
-        return null;
+        return ExchangeBuilder.directExchange(exchange).durable(true).build();
     }
 
 
@@ -55,7 +64,7 @@ public class RabbitMQConfig {
         /**
          * Add code to bind queue and Exchange
          */
-        return null;
+        return BindingBuilder.bind(queue()).to(myExchange()).with(routingKey).noargs();
     }
 
     /**
@@ -66,8 +75,10 @@ public class RabbitMQConfig {
         /**
          * Add code to create connection to rabbitMq broker
          */
-
-        return null;
+        CachingConnectionFactory cachingConnectionFactory= new CachingConnectionFactory(host);
+        cachingConnectionFactory.setUsername(username);
+        cachingConnectionFactory.setPassword(password);
+        return cachingConnectionFactory;
     }
 
 

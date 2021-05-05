@@ -1,0 +1,19 @@
+Rabbit Mq to download
+
+Commands for Rabbit Mq
+
+service rabbitmq-server start  -----------Step 1
+
+service rabbitmq-server status ----------Step2
+
+After That Run Producer and consumer Service files on Intellij
+
+Make a Post request on Postman on http://localhost:9090/api/v1/employee
+
+{
+   "id":"1",
+   "name": "suryansh"
+   
+}
+
+and after that see the message in consumer service on intellij

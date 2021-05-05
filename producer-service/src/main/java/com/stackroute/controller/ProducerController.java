@@ -1,6 +1,8 @@
 package com.stackroute.controller;
 
 import com.stackroute.domain.Employee;
+import com.stackroute.service.RabbitMqSender;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +17,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/api/v1/")
 public class ProducerController {
 
+    private RabbitMqSender rabbitMqSender;
+
+    @Autowired
+    public ProducerController(RabbitMqSender rabbitMqSender){
+        this.rabbitMqSender=rabbitMqSender;
+    }
     /*
      * Add code to autowire RabbitMQSender
      */
@@ -29,6 +37,7 @@ public class ProducerController {
     @PostMapping(value = "employee")
     public String publishEmployeeDetails(@RequestBody Employee employee) {
 
+        rabbitMqSender.send(employee);
         /*
          * Add code to send employee object to RabbitMQ
          */
